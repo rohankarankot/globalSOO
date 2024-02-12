@@ -7,9 +7,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { User, UserModel } from '../common/schema/user.schema';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
-import { JwtStrategy } from '../common/jwt.strategy';
+import { JwtStrategy } from '../common/strategies/jwt.strategy';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { UserService } from 'src/user/user.service';
+import { GoogleStrategy } from 'src/common/strategies/google.strategy';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UserService } from 'src/user/user.service';
   controllers: [AuthController],
   providers: [
     JwtStrategy,
+    GoogleStrategy,
     JwtAuthGuard,
     AuthService,
     UserService,
