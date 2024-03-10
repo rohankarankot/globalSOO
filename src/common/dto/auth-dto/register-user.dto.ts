@@ -12,7 +12,7 @@ import {
 import { LoginDto } from './login-user.dto';
 import { passwordCriteriaRegex } from 'src/lib/regex';
 import { CONSTANTS } from 'src/auth/constants';
-import { RegisteredAt } from 'src/common/schema/user.schema';
+import { RegisteredAt } from 'src/lib/common';
 
 @ApiExtraModels(LoginDto)
 export class RegistrationDto {

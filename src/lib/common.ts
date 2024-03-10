@@ -1,0 +1,14 @@
+export enum Category {
+  MEN = 'MEN',
+  WOMEN = 'WOMEN',
+  WOMEN_TOPS = 'WOMEN_TOPS',
+  WOMEN_SKIRTS = 'WOMEN_SKIRTS',
+  MEN_SHIRTS = 'MEN_SHIRTS',
+  MEN_TSHIRTS = 'MEN_TSHIRTS',
+}
+
+export enum RegisteredAt {
+  PROJECT_NEST = 'PROJECT_NEST',
+  GOOGLE_REGISTERED = 'GOOGLE_REGISTERED',
+  DRIFT = 'DRIFT',
+}

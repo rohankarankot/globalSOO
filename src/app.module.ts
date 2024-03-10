@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from './user/user.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
     AuthModule,
     UserModule,
+    CartModule,
   ],
 })
 export class AppModule {}

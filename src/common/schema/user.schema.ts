@@ -1,11 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { RegisteredAt } from 'src/lib/common';
 
 export type UserDocument = User & Document;
-export enum RegisteredAt {
-  PROJECT_NEST = 'PROJECT_NEST',
-  GOOGLE_REGISTERED = 'GOOGLE_REGISTERED',
-}
+
 @Schema({
   timestamps: true,
 })
