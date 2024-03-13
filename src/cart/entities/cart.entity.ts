@@ -1,25 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document, Types } from 'mongoose';
-import { User } from 'src/common/schema/user.schema';
-import { Category, RegisteredAt } from 'src/lib/common';
+import { IsNumber } from 'class-validator';
+import { Document, Types } from 'mongoose';
 
-export type CartDocument = Cart & Document;
-
+// Define a schema for the items within the cart
 @Schema({
   timestamps: true,
 })
-export class Cart extends Document {
+export class CartItem extends Document {
   @Prop({ required: true })
   name: string;
 
   @Prop({ required: true })
-  description: string;
+  sku: string;
 
   @Prop({ required: true })
-  image: string[];
+  product_id: string;
 
-  @Prop({ required: true })
-  category: Category;
+  @Prop({ required: true, enum: ['MEN', 'WOMEN', 'KIDS'] })
+  category: string;
 
   @Prop({ required: true })
   price: number;
@@ -28,13 +26,25 @@ export class Cart extends Document {
   discounted_price: number;
 
   @Prop({ required: true })
+  finalPrice: number;
+
+  @Prop({ required: true })
   quantity: number;
-
-  @Prop()
-  color: string[];
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  user: User;
 }
 
-export const CartModal = SchemaFactory.createForClass(Cart);
+export const CartItemSchema = SchemaFactory.createForClass(CartItem);
+
+// Define a schema for the cart
+@Schema()
+export class Cart extends Document {
+  @Prop({ required: true })
+  user: Types.ObjectId;
+
+  @Prop({ type: [CartItemSchema], required: true })
+  items: CartItem[];
+
+  @Prop({ required: true })
+  totalCartValue: number;
+}
+
+export const CartModel = SchemaFactory.createForClass(Cart);
