@@ -1,12 +1,14 @@
-import { Injectable, Query } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import SanityService from 'src/common/sanity';
-import { getAllProducts } from 'src/lib/sanityQueries/product';
+import { getAllProducts, getProductInfo } from 'src/lib/sanityQueries/product';
 import { createFilterfromProduct } from './helpers/allProductFilters';
 
 @Injectable()
 export class ProductService {
+  constructor(private readonly sanityService: SanityService) {}
+
   create(createProductDto: CreateProductDto) {
     return 'This action adds a new product';
   }
@@ -15,9 +17,8 @@ export class ProductService {
     return `This action returns all product`;
   }
   async getAllProducts(page, limit) {
-    const sanityService = new SanityService();
     try {
-      const data = await sanityService.client.fetch(getAllProducts);
+      const data = await this.sanityService.client.fetch(getAllProducts);
       const totalItems = data?.totalCount || 10;
 
       // Calculate pagination metadata
@@ -45,8 +46,12 @@ export class ProductService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findProduct(id: string) {
+    const product = await this.sanityService.client.fetch(getProductInfo(id));
+    if (!product?.[0]) {
+      throw new NotFoundException('Product not found');
+    }
+    return product[0];
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {

@@ -9,3 +9,6 @@ export const getAllProducts = `{
   "totalCount": count(*[_type == "product"])
 }
 `;
+export const getProductInfo = (id: string) => {
+  return `*[_type == "product" &&  _id=="${id}"] `;
+};
