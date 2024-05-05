@@ -16,9 +16,10 @@ export class ProductService {
   findAll() {
     return `This action returns all product`;
   }
-  async getAllProducts(page, limit) {
+  async getAllProducts(page, limit, price_from?: number, price_to?: number) {
     try {
-      const data = await this.sanityService.client.fetch(getAllProducts);
+      const query = getAllProducts(price_from, price_to);
+      const data = await this.sanityService.client.fetch(query);
       const totalItems = data?.totalCount || 10;
 
       // Calculate pagination metadata
@@ -33,6 +34,7 @@ export class ProductService {
       const filters = createFilterfromProduct(data?.products);
       return {
         data: pageData,
+        totalCount: data.totalCount,
         filters,
         pagination: {
           perPage,
@@ -52,13 +54,5 @@ export class ProductService {
       throw new NotFoundException('Product not found');
     }
     return product[0];
-  }
-
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} product`;
   }
 }
