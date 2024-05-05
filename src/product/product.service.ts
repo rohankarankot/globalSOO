@@ -1,6 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
 import SanityService from 'src/common/sanity';
 import { getAllProducts, getProductInfo } from 'src/lib/sanityQueries/product';
 import { createFilterfromProduct } from './helpers/allProductFilters';
@@ -9,13 +7,6 @@ import { createFilterfromProduct } from './helpers/allProductFilters';
 export class ProductService {
   constructor(private readonly sanityService: SanityService) {}
 
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
-  }
-
-  findAll() {
-    return `This action returns all product`;
-  }
   async getAllProducts(page, limit, price_from?: number, price_to?: number) {
     try {
       const query = getAllProducts(price_from, price_to);
