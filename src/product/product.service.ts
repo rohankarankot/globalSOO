@@ -7,9 +7,15 @@ import { createFilterfromProduct } from './helpers/allProductFilters';
 export class ProductService {
   constructor(private readonly sanityService: SanityService) {}
 
-  async getAllProducts(page, limit, price_from?: number, price_to?: number) {
+  async getAllProducts(
+    page,
+    limit,
+    price_from?: number,
+    price_to?: number,
+    brandName?: string[],
+  ) {
     try {
-      const query = getAllProducts(price_from, price_to);
+      const query = getAllProducts(price_from, price_to, brandName);
       const data = await this.sanityService.client.fetch(query);
       const totalItems = data?.totalCount || 10;
 

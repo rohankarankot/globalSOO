@@ -1,13 +1,34 @@
-export const getAllProducts = (minPrice?: number, maxPrice?: number) => {
+export const getAllProducts = (
+  minPrice?: number,
+  maxPrice?: number,
+  brandNames: string | string[] = [],
+) => {
+  const brandConditions = Array.isArray(brandNames)
+    ? brandNames.map((brandName) => `brandName == "${brandName}"`).join(' || ')
+    : `brandName == "${brandNames}"`;
+
   let query = `{
     "products": *[_type == "product"`;
 
-  if (minPrice !== undefined) {
-    query += ` && price.finalPrice.value >= ${minPrice}`;
-  }
+  if (
+    minPrice !== undefined ||
+    maxPrice !== undefined ||
+    brandNames.length > 0
+  ) {
+    query += ' && (';
+    if (minPrice !== undefined) {
+      query += ` price.finalPrice.value >= ${minPrice}`;
+    }
 
-  if (maxPrice !== undefined) {
-    query += ` && price.finalPrice.value <= ${maxPrice}`;
+    if (maxPrice !== undefined) {
+      query += `${minPrice !== undefined ? ' &&' : ''} price.finalPrice.value <= ${maxPrice}`;
+    }
+
+    if (brandNames.length > 0) {
+      query += `${minPrice !== undefined || maxPrice !== undefined ? ' && (' : ''} ${brandConditions}`;
+      query += ')';
+    }
+    query += ')';
   }
 
   query += `] {
@@ -19,12 +40,25 @@ export const getAllProducts = (minPrice?: number, maxPrice?: number) => {
     },
     "totalCount": count(*[_type == "product"`;
 
-  if (minPrice !== undefined) {
-    query += ` && price.finalPrice.value >= ${minPrice}`;
-  }
+  if (
+    minPrice !== undefined ||
+    maxPrice !== undefined ||
+    brandNames.length > 0
+  ) {
+    query += ' && (';
+    if (minPrice !== undefined) {
+      query += ` price.finalPrice.value >= ${minPrice}`;
+    }
 
-  if (maxPrice !== undefined) {
-    query += ` && price.finalPrice.value <= ${maxPrice}`;
+    if (maxPrice !== undefined) {
+      query += `${minPrice !== undefined ? ' &&' : ''} price.finalPrice.value <= ${maxPrice}`;
+    }
+
+    if (brandNames.length > 0) {
+      query += `${minPrice !== undefined || maxPrice !== undefined ? ' && (' : ''} ${brandConditions}`;
+      query += ')';
+    }
+    query += ')';
   }
 
   query += `])

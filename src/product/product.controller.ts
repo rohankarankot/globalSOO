@@ -13,12 +13,14 @@ export class ProductController {
     @Query('limit') limit: number = 10,
     @Query('price_from') price_from: number,
     @Query('price_to') price_to: number,
+    @Query('brandName') brandName: string[],
   ) {
     return this.productService.getAllProducts(
       page,
       limit,
       price_from,
       price_to,
+      brandName,
     );
   }
 
