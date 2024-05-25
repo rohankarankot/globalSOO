@@ -1,4 +1,6 @@
 import {
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
   Req,
@@ -61,7 +63,10 @@ export class AuthService {
       });
 
       if (!user) {
-        throw new UnauthorizedException('Invalid username or password');
+        throw new HttpException(
+          'Invalid username or password',
+          HttpStatus.UNAUTHORIZED,
+        );
       }
       if (user.deactivated) {
         await this.userModel.findByIdAndUpdate(
@@ -72,7 +77,10 @@ export class AuthService {
       }
       const isPasswordMatch = await bcrypt.compare(password, user.password);
       if (!isPasswordMatch) {
-        throw new UnauthorizedException('Invalid username or password');
+        throw new HttpException(
+          'Invalid username or password',
+          HttpStatus.UNAUTHORIZED,
+        );
       }
       const token = this.jwtService.sign({
         id: user._id,
